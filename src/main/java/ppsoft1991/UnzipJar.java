@@ -40,6 +40,7 @@ public class UnzipJar implements IScan{
             if (entry.getName().endsWith(".class")){
                 String name = entry.getName().split("\\.")[0].replace("/",".");
                 if (name.matches(prex)){
+                    System.out.println("[+] unzip "+jarFile.getName());
                     unzip(jarFile, Main.unzipPath);
                 }
                 break;
