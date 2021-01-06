@@ -7,34 +7,42 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.regex.Pattern;
 
-public class FindClass {
+public class FindClass implements IScan{
 
-    public static void scan(String dir, String fileName) throws IOException {
+    @Override
+    public void scan(String dir, String fileName) throws IOException {
         File d = new File(dir);
         if (!d.isDirectory()) {
             if (d.getName().endsWith(".jar")){
-                System.out.println("====Scan "+d.getName()+" ====");
-                FindClass.findClassFromJar(new JarFile(d), fileName);
+                FindClass.findClassFromJar(d, fileName);
             }
         }else {
-            System.out.println("[+] Scan Dir"+dir+"\n");
+            if (Main.log){
+                System.out.println("[+] Scan Dir"+dir+"\n");
+            }
             File[] files = d.listFiles();
             for (File f:files){
-                FindClass.scan(f.getAbsolutePath(), fileName);
+                this.scan(f.getAbsolutePath(), fileName);
             }
         }
     }
 
-    public static void findClassFromJar(JarFile jarFile,String prex){
-        Enumeration<JarEntry> en = jarFile.entries();
+    public static void findClassFromJar(File jarFile,String prex) throws IOException {
+        List<String> clssName = new ArrayList<>();
+        Enumeration<JarEntry> en = new JarFile(jarFile).entries();
         while (en.hasMoreElements()){
             JarEntry je = en.nextElement();
             String name = je.getName().split("\\.")[0].replace("/",".");
             if (name.matches(prex)){
                 String clss = name.replace(".class", "").replaceAll("/", ".");
-                System.out.println("[!]"+clss);
+                clssName.add(clss);
+            }
+        }
+        if (!clssName.isEmpty()){
+            System.out.println("=== "+ jarFile.getName() +" ===");
+            for (String clsName: clssName){
+                System.out.println("[!]"+clsName);
             }
         }
     }
