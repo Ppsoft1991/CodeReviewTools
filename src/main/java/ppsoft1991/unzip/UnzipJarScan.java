@@ -1,28 +1,28 @@
-package ppsoft1991;
+package ppsoft1991.unzip;
 
 import cn.hutool.core.util.ZipUtil;
+import ppsoft1991.IScan;
+import ppsoft1991.Main;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.io.*;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-public class UnzipJar implements IScan{
+public class UnzipJarScan implements IScan {
 
     public void scan(String dir, String groupName) throws IOException {
         File d = new File(dir);
         if (!d.isDirectory()) {
             if (d.getName().endsWith(".jar")){
-                UnzipJar.findGroupIdFromJar(d, groupName);
+                UnzipJarScan.findGroupIdFromJar(d, groupName);
             }
         }else {
             if (Main.log){
                 System.out.println("[+] Scan Dir"+dir+"\n");
             }
             File[] files = d.listFiles();
+            assert files != null;
             for (File f:files){
                 this.scan(f.getAbsolutePath(), groupName);
             }
