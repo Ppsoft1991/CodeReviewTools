@@ -9,39 +9,47 @@ import ppsoft1991.Main;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DecompilerClassScan implements IScan {
     @Override
-    public void scan(String dir, String fileName) throws Exception {
-        File d = new File(dir);
-        if (!d.isDirectory()) {
-            if (d.getName().endsWith(".class")){
-                decompiler(d);
-            }
-        }else {
-            if (Main.log){
-                System.out.println("[+] Scan Dir"+dir+"\n");
-            }
-            File[] files = d.listFiles();
-            assert files != null;
-            for (File f:files){
-                this.scan(f.getAbsolutePath(), "1");
-            }
+    public void scan(String dir, String s) throws Exception {
+        if (!dir.endsWith("/")){
+            dir = dir +"/";
+        }
+        try (Stream<Path> paths = Files.walk(Paths.get(dir))) {
+            String finalDir = dir;
+            paths.map(Path::toString).filter(f -> f.endsWith(".class"))
+                    .collect(Collectors.toList())
+                    .forEach(c -> decompiler(new File(c), finalDir));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    public static void decompiler(File clazzFile) throws Exception {
+    public static void decompiler(File clazzFile, String base){
+        int baseLength = base.length();
         String path = clazzFile.getAbsolutePath();
         System.out.println(clazzFile.getAbsolutePath());
+        path = path.substring(baseLength);
         if (path.endsWith(".class")){
-            Loader loader = new ppsoft1991.decompier.Loader();
+            Loader loader = new ppsoft1991.decompier.Loader(new File(base));
             Printer printer = new ppsoft1991.decompier.Printer();
             ClassFileToJavaSourceDecompiler decompiler = new ClassFileToJavaSourceDecompiler();
-            decompiler.decompile(loader, printer, path);
-            String source = printer.toString();
-            FileWriter fileWriter = new FileWriter(path.replace(".class",".java"));
-            fileWriter.write(source);
-            fileWriter.close();
+            try {
+                decompiler.decompile(loader, printer, path);
+                String source = printer.toString();
+                FileWriter fileWriter = new FileWriter(clazzFile.getAbsolutePath().replace(".class",".java"));
+                fileWriter.write(source);
+                fileWriter.close();
+            }catch (Exception e){
+                System.out.println("[-] 文件："+clazzFile.getName()+"反编译失败！");
+            }
+
         }
     }
 }

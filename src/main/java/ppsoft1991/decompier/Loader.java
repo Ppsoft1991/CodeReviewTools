@@ -7,10 +7,13 @@ import java.io.*;
 public class Loader implements org.jd.core.v1.api.loader.Loader {
     protected File base;
 
+    public Loader(File base) {
+        this.base = base;
+    }
 
     @Override
     public byte[] load(String internalName) throws LoaderException {
-        File file = new File(internalName);
+        File file = newFile(internalName);
 
         if (file.exists()) {
             try (FileInputStream in= new FileInputStream(file); ByteArrayOutputStream out=new ByteArrayOutputStream()) {
@@ -37,6 +40,6 @@ public class Loader implements org.jd.core.v1.api.loader.Loader {
     }
 
     protected File newFile(String internalName) {
-        return new File(internalName);
+        return new File(base, internalName.replace('/', File.separatorChar));
     }
 }

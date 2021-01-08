@@ -5,27 +5,30 @@ import ppsoft1991.IScan;
 import ppsoft1991.Main;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class UnzipJarScan implements IScan {
 
     public void scan(String dir, String groupName) throws IOException {
-        File d = new File(dir);
-        if (!d.isDirectory()) {
-            if (d.getName().endsWith(".jar")){
-                UnzipJarScan.findGroupIdFromJar(d, groupName);
-            }
-        }else {
-            if (Main.log){
-                System.out.println("[+] Scan Dir"+dir+"\n");
-            }
-            File[] files = d.listFiles();
-            assert files != null;
-            for (File f:files){
-                this.scan(f.getAbsolutePath(), groupName);
-            }
+        try (Stream<Path> paths = Files.walk(Paths.get(dir))) {
+            paths.map(Path::toString).filter(f -> f.endsWith(".jar"))
+                    .collect(Collectors.toList())
+                    .forEach(c-> {
+                        try {
+                            UnzipJarScan.findGroupIdFromJar(new File(c), groupName);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
