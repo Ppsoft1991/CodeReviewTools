@@ -1,7 +1,7 @@
 package ppsoft1991.decompier;
 
 public class Printer implements org.jd.core.v1.api.printer.Printer {
-    protected static final String TAB = "  ";
+    protected static final String TAB = "   ";
     protected static final String NEWLINE = "\n";
 
     protected int indentationCount = 0;

@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,10 +23,21 @@ public class DecompilerClassScan implements IScan {
             dir = dir +"/";
         }
         try (Stream<Path> paths = Files.walk(Paths.get(dir))) {
-            String finalDir = dir;
-            paths.map(Path::toString).filter(f -> f.endsWith(".class"))
-                    .collect(Collectors.toList())
-                    .forEach(c -> decompiler(new File(c), finalDir));
+            List<String> collect = paths.map(Path::toString).filter(f -> f.endsWith(".class"))
+                    .collect(Collectors.toList());
+            int collectLength = collect.size();
+            int part = collectLength/100;
+            int aPart = part;
+            int partNum = 0;
+            for (int i = 0; i < collectLength; i++) {
+                if (aPart == i){
+                    System.out.println("完成了: "+partNum+"%");
+                    partNum++;
+                    aPart = aPart + part;
+                }
+                decompiler(new File(collect.get(i)), dir);
+            }
+            //.forEach(c -> decompiler(new File(c), finalDir));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -34,7 +46,9 @@ public class DecompilerClassScan implements IScan {
     public static void decompiler(File clazzFile, String base){
         int baseLength = base.length();
         String path = clazzFile.getAbsolutePath();
-        System.out.println(clazzFile.getAbsolutePath());
+        if (Main.log){
+            System.out.println(clazzFile.getAbsolutePath());
+        }
         path = path.substring(baseLength);
         if (path.endsWith(".class")){
             Loader loader = new ppsoft1991.decompier.Loader(new File(base));
