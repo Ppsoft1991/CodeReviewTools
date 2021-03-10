@@ -1,6 +1,6 @@
-package ppsoft1991.find;
+package ppsoft1991.Scanner.find;
 
-import ppsoft1991.IScan;
+import ppsoft1991.Scanner.IScan;
 import ppsoft1991.Main;
 
 import java.io.File;
@@ -34,21 +34,27 @@ public class FindClassScan implements IScan {
 
     public static void findClassFromJar(File jarFile,String prex) throws IOException {
         List<String> clssName = new ArrayList<>();
-        Enumeration<JarEntry> en = new JarFile(jarFile).entries();
-        while (en.hasMoreElements()){
-            JarEntry je = en.nextElement();
-            String name = je.getName().split("\\.")[0].replace("/",".");
-            if (name.matches(prex)){
-                String clss = name.replace(".class", "").replaceAll("/", ".");
-                clssName.add(clss);
+        try {
+            Enumeration<JarEntry> en = new JarFile(jarFile).entries();
+            while (en.hasMoreElements()){
+                JarEntry je = en.nextElement();
+                String name = je.getName().split("\\.")[0].replace("/",".");
+                if (name.matches(prex)&&je.getName().endsWith(".class")){
+                    String clss = name.replace(".class", "").replaceAll("/", ".");
+                    clssName.add(clss);
+                }
             }
-        }
-        if (!clssName.isEmpty()){
-            System.out.println("=== "+ jarFile.getName() +" ===");
-            for (String clsName: clssName){
-                System.out.println("[!]"+clsName);
+            if (!clssName.isEmpty()){
+                System.out.println("=== "+ jarFile.getName() + ": "+jarFile.getPath() +" ===");
+                for (String clsName: clssName){
+                    System.out.println("[!]"+clsName);
+                }
             }
+        }catch (Exception e){
+            System.out.println(jarFile.getAbsolutePath()+" 搜索失败");
+            System.out.println(e);
         }
+
     }
 }
 

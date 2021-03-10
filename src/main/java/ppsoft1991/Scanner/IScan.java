@@ -1,4 +1,4 @@
-package ppsoft1991;
+package ppsoft1991.Scanner;
 
 import java.io.IOException;
 

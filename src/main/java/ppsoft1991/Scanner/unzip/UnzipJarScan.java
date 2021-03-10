@@ -1,7 +1,8 @@
-package ppsoft1991.unzip;
+package ppsoft1991.Scanner.unzip;
 
 import cn.hutool.core.util.ZipUtil;
-import ppsoft1991.IScan;
+import ppsoft1991.ParseCli;
+import ppsoft1991.Scanner.IScan;
 import ppsoft1991.Main;
 
 import java.io.*;
@@ -17,6 +18,10 @@ import java.util.stream.Stream;
 public class UnzipJarScan implements IScan {
 
     public void scan(String dir, String groupName) throws IOException {
+        if(!ParseCli.cmd.hasOption("o")){
+            System.out.println("解压Jar包模式必须要设置-o指定路径");
+            System.exit(0);
+        }
         try (Stream<Path> paths = Files.walk(Paths.get(dir))) {
             paths.map(Path::toString).filter(f -> f.endsWith(".jar"))
                     .collect(Collectors.toList())
@@ -44,9 +49,9 @@ public class UnzipJarScan implements IScan {
                 String name = entry.getName().split("\\.")[0].replace("/",".");
                 if (name.matches(prex)){
                     System.out.println("[+] unzip "+jarFile.getName());
-                    unzip(jarFile, Main.unzipPath);
+                    unzip(jarFile, ParseCli.cmd.getOptionValue("o"));
+                    break;
                 }
-                break;
             }
         }
     }

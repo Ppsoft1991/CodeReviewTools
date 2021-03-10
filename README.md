@@ -14,23 +14,45 @@ HW竞争越来越激烈的年代，谁能在指定时间内打下更多的点，
 - 通过正则搜索特定class名称
 - 通过正则直接反编译拥有特定groupId的jar包到某个目录
 
+```
+CodeReviewTools v1.0 by Ppsoft1991
+
+usage: java -jar CodeReviewTools.jar -m <method>
+-d,--dir <arg>      target path
+-f,--file <arg>     target file
+-h,--help           print help information
+-m,--method <arg>   [search, unzip, decompiler, clear, all, war]
+-n,--name <arg>     search class file or group name
+-o,--output <arg>   output path
+```
+
+
+工具release版本使用jdk 11.0.9编译，如需要1.8版本请自行下载源码编译使用
 
 ### 例子
 - 想快速寻找哪些jar包存在名为*Controller的jar文件
 
-    ```java -jar CodeReviewTools.jar search "nc(.)*Controller\$" "home/"```
+    ```java -jar CodeReviewTools.jar -m search -n "nc(.)*Controller\$" -d "home/"```
 
-    ![](pic/2021-01-07_17-48.png)
+    ![](pic/2021-03-10_14-07.png)
 
 - 想快速解压jar包中包含groupId为com.yxxxx的jar并且反编译存储在/tmp/nc
 
-    ```java -jar CodeReviewTools.jar all "com.yxxx(.)*" "home/lib" "/tmp/nc" ```
+    ```java -jar CodeReviewTools.jar -m all -n "com.yxxx(.)*" -d "home/lib" -o "/tmp/nc" ```
     
-    ![](pic/2021-01-07_17-50.png)
+    ![](pic/2021-03-10_13-54.png)
 
     效果：
-    ![](pic/2021-01-07_17-51.png)
+    ![](pic/2021-03-10_14-17.png)
   
 ### 感谢
 
-[jd-core](https://github.com/java-decompiler/jd-core)
+[luyten](https://github.com/deathmarine/Luyten)
+
+
+### 版本更新
+
+#### V1.0
+
+- 重新做了命令行参数
+- 反编译工具从jd-core变更为luyten (速度慢了不是一点半点，被迫使用线程池来进行反编译

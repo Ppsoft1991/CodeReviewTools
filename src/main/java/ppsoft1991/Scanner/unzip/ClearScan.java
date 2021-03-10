@@ -1,8 +1,6 @@
-package ppsoft1991.unzip;
+package ppsoft1991.Scanner.unzip;
 
-import ppsoft1991.IScan;
-import ppsoft1991.Main;
-import ppsoft1991.find.FindClassScan;
+import ppsoft1991.Scanner.IScan;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +13,7 @@ import java.util.stream.Stream;
 public class ClearScan implements IScan {
     @Override
     public void scan(String dir, String fileName) throws Exception {
+        System.out.println("Clear模式开始...");
         try (Stream<Path> paths = Files.walk(Paths.get(dir))) {
             paths.map(Path::toString).filter(f -> f.endsWith(".class"))
                     .collect(Collectors.toList())
