@@ -1,4 +1,10 @@
-# CodeReviewTools
+# CodeReviewTools 
+
+---
+![](https://img.shields.io/badge/Language-Java-blue)
+![release](https://img.shields.io/badge/release-v1.0-red.svg?style=flat-square)
+
+## 🎉 介绍
 
 HW竞争越来越激烈的年代，谁能在指定时间内打下更多的点，谁就能在内网中抢下先机。
 
@@ -9,7 +15,7 @@ HW竞争越来越激烈的年代，谁能在指定时间内打下更多的点，
 
 我们想快速搜索代码中的关键点，就必须得对jar包进行反编译。所以我写了CodeReviewTools
 
-代码审计小工具，目前功能
+## 🍭 目前功能
 
 - 通过正则搜索特定class名称
 - 通过正则直接反编译拥有特定groupId的jar包到某个目录
@@ -29,7 +35,7 @@ usage: java -jar CodeReviewTools.jar -m <method>
 
 工具release版本使用jdk 11.0.9编译，如需要1.8版本请自行下载源码编译使用
 
-### 例子
+## 💡 例子
 - 想快速寻找哪些jar包存在名为*Controller的jar文件
 
     ```java -jar CodeReviewTools.jar -m search -n "nc(.)*Controller\$" -d "home/"```
@@ -44,13 +50,17 @@ usage: java -jar CodeReviewTools.jar -m <method>
 
     效果：
     ![](pic/2021-03-10_14-17.png)
+
+[![Stargazers over time](https://starchart.cc/Ppsoft1991/CodeReviewTools.svg)](https://starchart.cc/Ppsoft1991/CodeReviewTools)
+
   
-### 感谢
+## ❤️ 感谢
 
 [luyten](https://github.com/deathmarine/Luyten)
 
 
-### 版本更新
+
+## ✔️ 版本更新
 
 #### V1.0
 
