@@ -11,28 +11,30 @@ import ppsoft1991.Scanner.unzip.WarScan;
 public class ParseCli {
     public static IScan scanner = null;
     public static CommandLine cmd = null;
+    private static final Options options = new Options();
+    private static final CommandLineParser parser = new DefaultParser();
 
-    public static void parser(String[] args) throws Exception {
-        String dir = null;
-        String name = null;
-
-        Options options = new Options();
+    static {
         options.addOption("m", "method", true, "[search, unzip, decompiler, clear, all, war]");
         options.addOption("d", "dir", true, "target path");
         options.addOption("n","name",true,"search class file or group name");
         options.addOption("o", "output", true, "output path");
         options.addOption("f", "file", true ,"target file");
         options.addOption("h", "help", false, "print help information");
+    }
 
-        CommandLineParser parser = new DefaultParser();
+    public static void parser(String[] args) throws Exception {
+        String dir = null;
+        String name = null;
+
         cmd = parser.parse(options, args);
-        HelpFormatter help = new HelpFormatter();
 
         /*
         *  输出help
         * */
 
         if (cmd.hasOption("h")){
+            HelpFormatter help = new HelpFormatter();
             System.out.println(Banner.getBanner()+" v1.0 by Ppsoft1991\n");
             help.printHelp("java -jar CodeReviewTools.jar -m <method>", options);
             System.exit(0);

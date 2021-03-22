@@ -12,7 +12,6 @@ import java.util.Locale;
 public class Main {
 
     public static Boolean log = false;
-    public static IScan scanner = null;
 
     public static void main( String[] args ) throws Exception {
         ParseCli.parser(args);

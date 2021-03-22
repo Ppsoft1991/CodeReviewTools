@@ -66,3 +66,10 @@ usage: java -jar CodeReviewTools.jar -m <method>
 
 - 重新做了命令行参数
 - 反编译工具从jd-core变更为luyten (速度慢了不是一点半点，被迫使用线程池来进行反编译
+
+# 404StarLink 2.0 - Galaxy
+![](https://github.com/knownsec/404StarLink-Project/raw/master/logo.png)
+
+CodeReviewTools 是 404Team [星链计划2.0](https://github.com/knownsec/404StarLink2.0-Galaxy)中的一环，如果对CodeReviewTools 有任何疑问又或是想要找小伙伴交流，可以参考星链计划的加群方式。
+
+- [https://github.com/knownsec/404StarLink2.0-Galaxy#community](https://github.com/knownsec/404StarLink2.0-Galaxy#community)
