@@ -36,6 +36,14 @@ usage: java -jar CodeReviewTools.jar -m <method>
 工具release版本使用jdk 11.0.9编译，如需要1.8版本请自行下载源码编译使用
 
 ## 💡 例子
+- 获得war包，一键反编译classes
+  
+  ```java -jar CodeReviewTools.jar -m war -f webapps.war```
+
+  ![](pic/2021-03-24_01-30.png)
+  
+  会在-f制定的war包目录下生成对应的zip文件
+
 - 想快速寻找哪些jar包存在名为*Controller的jar文件
 
     ```java -jar CodeReviewTools.jar -m search -n "nc(.)*Controller\$" -d "home/"```
@@ -71,6 +79,10 @@ usage: java -jar CodeReviewTools.jar -m <method>
 
 - 重新做了命令行参数
 - 反编译工具从jd-core变更为luyten (速度慢了不是一点半点，被迫使用线程池来进行反编译
+
+
+# Todo
+- 允许指定反编译器 准备支持fernflower和luyten两种
 
 # 404StarLink 2.0 - Galaxy
 ![](https://github.com/knownsec/404StarLink-Project/raw/master/logo.png)
