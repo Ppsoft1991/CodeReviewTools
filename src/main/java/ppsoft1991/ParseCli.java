@@ -50,7 +50,7 @@ public class ParseCli {
             case "decompiler":  scanner = new DecompilerClassScan();            break;
             case "clear":       scanner = new ClearScan();                      break;
             case "war":         scanner = new WarScan();                        break;
-            case "all":         allCase(args);                                  break;
+            case "all":         allCase(args);System.exit(0);             break;
             default:            parser(new String[]{"-h"});System.exit(0);break;
         }
 

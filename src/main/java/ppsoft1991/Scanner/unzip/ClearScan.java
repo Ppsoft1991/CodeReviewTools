@@ -13,7 +13,6 @@ import java.util.stream.Stream;
 public class ClearScan implements IScan {
     @Override
     public void scan(String dir, String fileName) throws Exception {
-        System.out.println("Clear模式开始...");
         try (Stream<Path> paths = Files.walk(Paths.get(dir))) {
             paths.map(Path::toString).filter(f -> f.endsWith(".class"))
                     .collect(Collectors.toList())
@@ -21,5 +20,6 @@ public class ClearScan implements IScan {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("Clear模式结束");
     }
 }

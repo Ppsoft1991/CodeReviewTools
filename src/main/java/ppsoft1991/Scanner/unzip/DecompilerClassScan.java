@@ -28,6 +28,7 @@ public class DecompilerClassScan implements IScan {
         }
         //Loader loader = new ppsoft1991.decompier.Loader(new File(dir));
         ExecutorService executorService = Executors.newFixedThreadPool(200);
+        System.out.println("反编译模式开始");
         try (Stream<Path> paths = Files.walk(Paths.get(dir))) {
             List<String> collect = paths.map(Path::toString).filter(f -> f.endsWith(".class"))
                     .collect(Collectors.toList());
@@ -40,7 +41,6 @@ public class DecompilerClassScan implements IScan {
                 executorService.execute(() -> {
                     try {
                         Decompile.doSaveClassDecompiled(decompileFile, saveFile);
-                        num++;
                         if (num % 100 == 0) {
                             System.out.println("完成了: " + format.format((float) num / (float) collectLength * 100) + "%");
                         }

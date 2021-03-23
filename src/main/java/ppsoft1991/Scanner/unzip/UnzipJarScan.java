@@ -27,7 +27,7 @@ public class UnzipJarScan implements IScan {
                     .collect(Collectors.toList())
                     .forEach(c-> {
                         try {
-                            UnzipJarScan.findGroupIdFromJar(new File(c), groupName);
+                            UnzipJarScan.findGroupIdFromJar(new File( c), groupName);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

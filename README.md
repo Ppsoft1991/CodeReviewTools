@@ -62,6 +62,11 @@ usage: java -jar CodeReviewTools.jar -m <method>
 
 ## ✔️ 版本更新
 
+#### v1.1
+
+- 修复 @smi1e 反馈的all模式bug
+
+
 #### V1.0
 
 - 重新做了命令行参数

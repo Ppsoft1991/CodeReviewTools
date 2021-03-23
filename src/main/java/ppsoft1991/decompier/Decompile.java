@@ -125,22 +125,19 @@ public class Decompile {
                 } else {
                     try {
                         JarEntry etn = new JarEntry(entry.getName());
-                        if (entry.getName().endsWith(".java"))
-                            etn = new JarEntry(entry.getName().replace(".java", ".src.java"));
                         if (history.add(etn.getName())) {
                             out.putNextEntry(etn);
                             try {
                                 InputStream in = jfile.getInputStream(etn);
-                                if (in != null) {
                                     try {
                                         int count;
                                         while ((count = in.read(data, 0, 1024)) != -1) {
                                             out.write(data, 0, count);
                                         }
-                                    } finally {
                                         in.close();
+                                    }catch (Exception e){
+                                        System.out.println("文件"+etn+"跳过");
                                     }
-                                }
                             } finally {
                                 out.closeEntry();
                             }
