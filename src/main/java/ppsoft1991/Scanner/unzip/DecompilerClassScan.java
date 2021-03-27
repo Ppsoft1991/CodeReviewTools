@@ -29,31 +29,37 @@ public class DecompilerClassScan implements IScan {
         //Loader loader = new ppsoft1991.decompier.Loader(new File(dir));
         ExecutorService executorService = Executors.newFixedThreadPool(200);
         System.out.println("反编译模式开始");
-        try (Stream<Path> paths = Files.walk(Paths.get(dir))) {
-            List<String> collect = paths.map(Path::toString).filter(f -> f.endsWith(".class"))
-                    .collect(Collectors.toList());
-            int collectLength = collect.size();
-            NumberFormat format = NumberFormat.getInstance();
-            format.setMaximumFractionDigits(0);
-            for (String value : collect) {
-                File decompileFile = new File(value);
-                File saveFile = new File(decompileFile.getAbsolutePath().replace(".class", ".java"));
-                executorService.execute(() -> {
-                    try {
-                        Decompile.doSaveClassDecompiled(decompileFile, saveFile);
-                        if (num % 100 == 0) {
-                            System.out.println("完成了: " + format.format((float) num / (float) collectLength * 100) + "%");
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+            while (true){
+                try (Stream<Path> paths = Files.walk(Paths.get(dir))) {
+                    List<String> collect = paths.map(Path::toString).filter(f -> f.endsWith(".class"))
+                            .collect(Collectors.toList());
+                    int collectLength = collect.size();
+                    NumberFormat format = NumberFormat.getInstance();
+                    format.setMaximumFractionDigits(0);
+                    for (String value : collect) {
+                        File decompileFile = new File(value);
+                        File saveFile = new File(decompileFile.getAbsolutePath().replace(".class", ".java"));
+                        executorService.execute(() -> {
+                            try {
+                                Decompile.doSaveClassDecompiled(decompileFile, saveFile);
+                                System.out.println(num );
+                                if (num % 100 == 0) {
+                                    System.out.println("完成了: " + format.format((float) num / (float) collectLength * 100) + "%");
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        });
+                        //decompiler(new File(collect.get(i)), dir, loader);
                     }
-                });
-                //decompiler(new File(collect.get(i)), dir, loader);
+                    //.forEach(c -> decompiler(new File(c), finalDir));
+                } catch (IOException e) {e.printStackTrace();
+                    e.printStackTrace();
+                }
+            if (executorService.isTerminated()){
+                System.out.println("子线程全部结束");
+                break;
             }
-
-            //.forEach(c -> decompiler(new File(c), finalDir));
-        } catch (IOException e) {e.printStackTrace();
-            e.printStackTrace();
-        }
+            }
     }
 }

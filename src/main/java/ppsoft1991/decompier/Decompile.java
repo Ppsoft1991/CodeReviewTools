@@ -32,10 +32,16 @@ public class Decompile {
     }
 
     public static void doSaveClassDecompiled(File inFile, File outFile) throws Exception {
+        DecompilerSettings settings = Decompile.settings;
+        LuytenTypeLoader typeLoader = new LuytenTypeLoader();
+        MetadataSystem metadataSystem = new MetadataSystem(typeLoader);
         TypeReference type = metadataSystem.lookupType(inFile.getCanonicalPath());
-        // decompilationOptions.setSettings(settings);
-        // decompilationOptions.setFullDecompilation(true);
 
+        DecompilationOptions decompilationOptions = new DecompilationOptions();
+        decompilationOptions.setSettings(settings);
+        decompilationOptions.setFullDecompilation(true);
+
+        boolean isUnicodeEnabled = decompilationOptions.getSettings().isUnicodeOutputEnabled();
         TypeDefinition resolvedType = null;
         if (type == null || ((resolvedType = type.resolve()) == null)) {
             throw new Exception("Unable to resolve type.");
