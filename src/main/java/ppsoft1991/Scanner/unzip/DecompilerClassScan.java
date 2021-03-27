@@ -42,7 +42,7 @@ public class DecompilerClassScan implements IScan {
                         executorService.execute(() -> {
                             try {
                                 Decompile.doSaveClassDecompiled(decompileFile, saveFile);
-                                System.out.println(num );
+                                num++;
                                 if (num % 100 == 0) {
                                     System.out.println("完成了: " + format.format((float) num / (float) collectLength * 100) + "%");
                                 }
