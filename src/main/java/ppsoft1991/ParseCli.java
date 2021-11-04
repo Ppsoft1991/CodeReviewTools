@@ -3,13 +3,13 @@ package ppsoft1991;
 import org.apache.commons.cli.*;
 import ppsoft1991.Scanner.IScan;
 import ppsoft1991.Scanner.find.FindClassScan;
-import ppsoft1991.Scanner.unzip.ClearScan;
-import ppsoft1991.Scanner.unzip.DecompilerClassScan;
-import ppsoft1991.Scanner.unzip.UnzipJarScan;
-import ppsoft1991.Scanner.unzip.WarScan;
+import ppsoft1991.Scanner.unzip.*;
+
+import java.util.List;
 
 public class ParseCli {
     public static IScan scanner = null;
+    public static IScan Engine = new DecompilerFernFlowerScan();
     public static CommandLine cmd = null;
     private static final Options options = new Options();
     private static final CommandLineParser parser = new DefaultParser();
@@ -20,7 +20,15 @@ public class ParseCli {
         options.addOption("n","name",true,"search class file or group name");
         options.addOption("o", "output", true, "output path");
         options.addOption("f", "file", true ,"target file");
+        options.addOption("e", "engine",true, "decompile engine[defalut->fernflow;luyten->luyten]");
         options.addOption("h", "help", false, "print help information");
+    }
+
+    public static void printHelp(){
+        HelpFormatter help = new HelpFormatter();
+        System.out.println(Banner.getBanner()+" v1.0 by Ppsoft1991\n");
+        help.printHelp("java -jar CodeReviewTools.jar -m <method>", options);
+        System.exit(0);
     }
 
     public static void parser(String[] args) throws Exception {
@@ -32,12 +40,27 @@ public class ParseCli {
         /*
         *  输出help
         * */
+        if (cmd.getOptions().length==0||cmd.hasOption("h")){
+            printHelp();
+        }
+        /*
+        *  method为空，提示一下
+        * */
 
-        if (cmd.hasOption("h")){
+        if (!cmd.hasOption("m")){
+            System.out.println("[-] you must specify method\n\n");
             HelpFormatter help = new HelpFormatter();
             System.out.println(Banner.getBanner()+" v1.0 by Ppsoft1991\n");
             help.printHelp("java -jar CodeReviewTools.jar -m <method>", options);
             System.exit(0);
+        }
+        /*
+        *  指定反编译引擎
+        * */
+        if (cmd.hasOption("e")){
+            if (cmd.getOptionValue("e").equals("luyten")){
+                Engine = new DecompilerClassScan();
+            }
         }
 
         /*
@@ -47,7 +70,7 @@ public class ParseCli {
         switch (type){
             case "search":      scanner = new FindClassScan();                  break;
             case "unzip":       scanner = new UnzipJarScan();                   break;
-            case "decompiler":  scanner = new DecompilerClassScan();            break;
+            case "decompiler":  scanner = Engine;                               break;
             case "clear":       scanner = new ClearScan();                      break;
             case "war":         scanner = new WarScan();                        break;
             case "all":         allCase(args);System.exit(0);             break;
@@ -56,7 +79,7 @@ public class ParseCli {
 
         if (cmd.hasOption("d")){
             dir = cmd.getOptionValue("d");
-            if (cmd.hasOption("o") && cmd.getOptionValue("m").equals("decompiler")){
+            if (cmd.hasOption("o") && (type.equals("decompiler") || type.equals("clear"))){
                 dir = cmd.getOptionValue("o");
             }
         }else if(cmd.hasOption("f")){
