@@ -1,7 +1,7 @@
 package ppsoft1991.Scanner.unzip;
 
-import org.jetbrains.java.decompiler.main.decompiler.ConsoleDecompiler;
 import ppsoft1991.Scanner.IScan;
+import ppsoft1991.decompier.FernflowerEngine;
 
 public class DecompilerFernFlowerScan implements IScan {
     @Override
@@ -12,11 +12,12 @@ public class DecompilerFernFlowerScan implements IScan {
         System.out.println("反编译开始");
         System.out.println("目标目录: "+dir);
         String[] args = new String[]{"-hes=0","-hdc=0","-log=ERROR", dir, dir};
-        ConsoleDecompiler.main(args);
+        FernflowerEngine.main(args);
         System.out.println("反编译结束");
+
     }
 
     public static void main(String[] args) throws Exception {
-        new DecompilerFernFlowerScan().scan("/tmp/TongWeb", "");
+        //new DecompilerFernFlowerScan().scan("/", "");
     }
 }
